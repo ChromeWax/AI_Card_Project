@@ -1,0 +1,36 @@
+{
+  "version": "5.5.0",
+  "flags": {},
+  "shapes": [
+    {
+      "label": "crease",
+      "points": [
+        [
+          2410.673913043478,
+          1816.0869565217392
+        ],
+        [
+          2475.891304347826,
+          1890.0000000000002
+        ],
+        [
+          2132.413043478261,
+          2437.8260869565215
+        ],
+        [
+          2019.3695652173915,
+          2337.8260869565215
+        ]
+      ],
+      "group_id": null,
+      "description": "",
+      "shape_type": "polygon",
+      "flags": {},
+      "mask": null
+    }
+  ],
+  "imagePath": "Card (27).jpg",
+  "imageData": null,
+  "imageHeight": 4080,
+  "imageWidth": 2917
+}
