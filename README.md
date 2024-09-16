@@ -5,6 +5,7 @@ This project is a small part of a much larger project. It analyzes images of bas
 # Install dependencies
 * run the following command
 * pip install -r requirements.txt
+* Install CUDA version 12.1 (You'll need an Nvidia GPU)
 
 # How to Evaluate Image
 * run the following command
