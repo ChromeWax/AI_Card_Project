@@ -7,8 +7,9 @@ import sys
 
 import torch
 import torchvision.transforms.v2 as transforms
-from torchvision.tv_tensors import BoundingBoxes
-from torchvision.utils import draw_bounding_boxes
+import torch.nn.functional as F
+from torchvision.tv_tensors import BoundingBoxes, Mask
+from torchvision.utils import draw_bounding_boxes, draw_segmentation_masks
 from torchvision.models.detection import maskrcnn_resnet50_fpn_v2
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
@@ -101,6 +102,8 @@ if __name__=="__main__":
     pred_bboxes = BoundingBoxes(model_output[0]['boxes'][scores_mask], format='xyxy', canvas_size=resized_image.size[::-1])
     pred_labels = [class_names[int(label)] for label in model_output[0]['labels'][scores_mask]]
     pred_scores = model_output[0]['scores']
+    pred_masks = F.interpolate(model_output[0]['masks'][scores_mask], size=resized_image.size[::-1])
+    pred_masks = torch.concat([Mask(torch.where(mask >= threshold, 1, 0), dtype=torch.bool) for mask in pred_masks])
 
     '''
     Displays evaluation
@@ -109,8 +112,9 @@ if __name__=="__main__":
     pred_colors=[int_colors[i] for i in [class_names.index(label) for label in pred_labels]]
 
     image_tensor = transforms.PILToTensor()(resized_image)
+    annotated_tensor = draw_segmentation_masks(image=image_tensor, masks=pred_masks, alpha=0.3, colors=pred_colors)
     annotated_tensor = draw_bboxes(
-        image=image_tensor, 
+        image=annotated_tensor, 
         boxes=pred_bboxes, 
         labels=[f"{label}\n{prob*100:.2f}%" for label, prob in zip(pred_labels, pred_scores)],
         colors=pred_colors
