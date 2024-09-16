@@ -8,15 +8,17 @@ This project is a small part of a much larger project. It analyzes images of bas
 * Install CUDA version 12.1 (You'll need an Nvidia GPU)
 
 # How to Evaluate Image
+* There's a trained model in /Checkpoints that will be used for evaluating
 * run the following command
 * python .\evaluate_image.py "path/to/image"
 
 # How to Create Training Data
-* The training images used for the model are in /Images
+* The trained model uses the images and annotation in /Images
 * I used a program called Labelme to annotate each image
 
 # How to Train Model
-* This is currently not working and will be updated later on
+* It uses the images and annotations in /Images for training
+* python .\train_model.py
 
 # Screenshots
 ![](README/Example.PNG)
