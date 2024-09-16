@@ -18,7 +18,7 @@ This project is a small part of a much larger project. It analyzes images of bas
 * This is currently not working and will be updated later on
 
 # Screenshots
-![alt text](README/Example.png)
+![](README/Example.PNG)
 
 # Built With
 * Python
