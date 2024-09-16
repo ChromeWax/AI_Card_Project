@@ -1,13 +1,10 @@
 from pathlib import Path
 from functools import partial
 import pandas as pd
-import numpy as np
 import random
 import math
 import json
 from tqdm.auto import tqdm
-
-from cjm_pytorch_utils.core import pil_to_tensor, tensor_to_pil, get_torch_device, set_seed, denorm_img_tensor, move_data_to_device
 
 # Used to create unique colors for each class
 from distinctipy import distinctipy
@@ -18,20 +15,15 @@ from PIL import Image, ImageDraw
 # Import PyTorch dependencies
 import torch
 from torch.amp import autocast
-from torch.cuda.amp import GradScaler
-import torch.nn as nn
-import torch.nn.functional as F
 from torch.utils.data import Dataset, DataLoader
 import torchvision
 torchvision.disable_beta_transforms_warning()
 from torchvision.tv_tensors import BoundingBoxes, Mask
-from torchvision.utils import draw_bounding_boxes, draw_segmentation_masks
-import torchvision.transforms.v2  as transforms
-from torchvision.transforms.v2 import functional as TF
+from torchvision.utils import draw_bounding_boxes
+import torchvision.transforms.v2 as transforms
 
 # Import Mask R-CNN
-from torchvision.models.detection import maskrcnn_resnet50_fpn_v2, MaskRCNN
-from torchvision.models.detection import MaskRCNN_ResNet50_FPN_V2_Weights
+from torchvision.models.detection import maskrcnn_resnet50_fpn_v2
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 from torchvision.models.detection.mask_rcnn import MaskRCNNPredictor
 
@@ -102,6 +94,22 @@ def tensor_to_pil(tensor):
 
 def custom_collate_fn(batch):
     return tuple(zip(*batch))
+
+def move_data_to_device(data, device:torch.device):
+    if isinstance(data, tuple):
+        return tuple(move_data_to_device(d, device) for d in data)
+    
+    if isinstance(data, list):
+        return list(move_data_to_device(d, device) for d in data)
+    
+    elif isinstance(data, dict):
+        return {k: move_data_to_device(v, device) for k, v in data.items()}
+    
+    elif isinstance(data, torch.Tensor):
+        return data.to(device)
+    
+    else:
+        return data
 
 def run_epoch(model, dataloader, optimizer, lr_scheduler, device, scaler, epoch_id, is_training):
     """
@@ -207,7 +215,7 @@ def train_loop(model,
         None
     """
     # Initialize a gradient scaler for mixed-precision training if the device is a CUDA GPU
-    scaler = torch.cuda.amp.GradScaler() if device.type == 'cuda' and use_scaler else None
+    scaler = torch.amp.GradScaler() if device.type == 'cuda' and use_scaler else None
     best_loss = float('inf')  # Initialize the best validation loss
 
     # Loop over the epochs
