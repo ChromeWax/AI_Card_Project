@@ -10,7 +10,7 @@ This project is a small part of a much larger project. It analyzes images of bas
 # How to Evaluate Image
 * There's a trained model in /Checkpoints that will be used for evaluating
 * run the following command
-* python .\evaluate_image.py "path/to/image"
+* python ./evaluate_image.py "path/to/image"
 
 # How to Create Training Data
 * The trained model uses the images and annotation in /Images
@@ -18,7 +18,7 @@ This project is a small part of a much larger project. It analyzes images of bas
 
 # How to Train Model
 * It uses the images and annotations in /Images for training
-* python .\train_model.py
+* python ./train_model.py
 
 # Screenshots
 ![](README/Example.PNG)
