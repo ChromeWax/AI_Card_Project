@@ -36,8 +36,10 @@ for y in range(h):
 normal_map = (normals + 1) / 2 * 255  # Scale to range [0, 255]
 normal_map = normal_map.astype(np.uint8)
 
+normal_map_bgr = cv2.cvtColor(normal_map, cv2.COLOR_RGB2BGR)
+
 # Save or display the normal map
-cv2.imwrite('normal_map.png', normal_map)
-cv2.imshow('Normal Map', normal_map)
+cv2.imwrite('normal_map.png', normal_map_bgr)
+cv2.imshow('Normal Map', normal_map_bgr)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
